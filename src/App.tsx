@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FunctionalModuleId, FUNCTIONAL_MODULES } from './types/modules';
 import { NavHeader } from './components/NavHeader';
 import { NavSidebar } from './components/NavSidebar';
-import { BlankWorkspace } from './components/BlankWorkspace';
+import { PortalHomeWorkspace } from './components/PortalHomeWorkspace';
 import { ModuleLogin, UserSession } from './components/ModuleLogin';
 import { ESSModule } from './components/modules/ESSModule';
 import { HRModule } from './components/modules/HRModule';
@@ -108,9 +108,9 @@ export default function App() {
           onGoHome={() => handleSelectModule('home')}
         />
 
-        {/* Right Workspace: Left blank by default on home, or displays login page, or displays module */}
+        {/* Right Workspace: Shows Portal News & Developments Feed on home, or login page, or module */}
         <div className="flex-1 overflow-hidden flex flex-col bg-[#faf9f8]">
-          {activeModule === 'home' && <BlankWorkspace />}
+          {activeModule === 'home' && <PortalHomeWorkspace />}
 
           {/* Module Login Page if not authenticated into selected module */}
           {activeModule !== 'home' && (!sessions[activeModule] || pendingLoginModule === activeModule) && (
