@@ -1,0 +1,6 @@
+{
+  "name": "KASE ERP",
+  "description": "Enterprise Resource Planning system for Kerala Academy for Skills Excellence with Employee Self-Service, HR, IT, Placements, Skill Development, Projects, and Administration divisions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

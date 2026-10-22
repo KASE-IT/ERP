@@ -1,0 +1,1532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KASE ERP – Administration Module</title>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;height:100vh;display:flex;flex-direction:column;overflow:hidden;font:12px 'Segoe UI',Tahoma,Verdana,sans-serif;background:#f3f2f1;color:#201f1e}
+header{height:46px;flex-shrink:0;background:#004578;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 14px;gap:10px}
+header>div{display:flex;align-items:center;gap:10px}
+.logo{height:30px;max-width:94px;object-fit:contain;background:#fff;padding:2px 5px;border-radius:2px}
+.brand-fallback{display:none;background:#fff;color:#004578;padding:6px;font-weight:800}
+header input{font:inherit;padding:5px 8px;border:0;border-radius:2px}
+#sr{width:220px}
+.so{background:none;border:1px solid #8fb8dc;color:#fff;padding:4px 10px;cursor:pointer;font:inherit}
+#app{flex:1;display:flex;min-height:0;overflow:hidden}
+aside{width:226px;flex-shrink:0;overflow-y:auto;background:#f3f2f1;border-right:1px solid #d2d0ce;padding:6px 0}
+.nav-group-head{width:100%;display:flex;justify-content:space-between;align-items:center;text-align:left;padding:8px 12px 5px;background:transparent;border:0;color:#605e5c;font:700 11px 'Segoe UI',sans-serif;cursor:pointer}
+.nav-chevron{font-size:16px;transition:transform .15s}
+.nav-group-head[aria-expanded="true"] .nav-chevron{transform:rotate(90deg)}
+.nav-items{display:none}
+.nav-items.expanded{display:block}
+.ni{display:block;width:100%;text-align:left;background:none;border:0;border-left:4px solid transparent;padding:7px 12px 7px 22px;font:inherit;color:#201f1e;cursor:pointer}
+.ni:hover{background:#e8e6e4}
+.ni.on{background:#fff;border-left-color:#0078d4;font-weight:600;color:#004578}
+#pg{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden}
+.tb{background:#fff;padding:8px 16px;border-bottom:1px solid #d2d0ce;min-height:55px}
+.cr{font-size:11px;color:#605e5c}
+h1{font-size:18px;font-weight:600;margin:1px 0 0}
+.sub{font-size:11px;color:#605e5c;margin-top:3px}
+.rb{background:#faf9f8;border-bottom:1px solid #d2d0ce;padding:0 12px}
+.rt{display:inline-block;color:#0078d4;font-weight:700;font-size:11px;padding:6px 4px 3px;border-bottom:3px solid #0078d4}
+.rgs{display:flex;flex-wrap:wrap}
+.rg{padding:4px 8px;border-right:1px solid #e1dfdd}
+.bs{display:flex;gap:2px}
+.rg small{display:block;text-align:center;color:#605e5c;font-size:10px;margin-top:2px}
+.rbn{display:flex;flex-direction:column;align-items:center;min-width:58px;max-width:112px;background:none;border:1px solid transparent;padding:3px 6px;font:inherit;font-size:11px;cursor:pointer;color:#201f1e;text-align:center}
+.rbn i{font-style:normal;font-size:16px;color:#0078d4}
+.rbn:hover{background:#e1dfdd}
+.ct{flex:1;overflow:auto;padding:14px 16px}
+.fp{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+.fp input,.fp select{padding:5px 8px;border:1px solid #8a8886;background:#fff;font:inherit}
+.fp input{width:240px}
+.tw{overflow-x:auto;background:#fff;border:1px solid #d2d0ce}
+table{width:100%;border-collapse:collapse}
+th{background:#f3f2f1;color:#605e5c;text-align:left;padding:7px 9px;border-bottom:1px solid #d2d0ce;white-space:nowrap;font-weight:600}
+td{padding:7px 9px;border-bottom:1px solid #edebe9;vertical-align:top}
+tbody tr{cursor:pointer}
+tbody tr:hover td{background:#f3f9fd}
+.bd{display:inline-block;padding:2px 7px;font-weight:600;font-size:11px;background:#fff4ce;color:#835b00;white-space:nowrap}
+.bd.g{background:#dff6dd;color:#0b6a0b}
+.bd.r{background:#fde7e9;color:#a4262c}
+.bd.b{background:#deecf9;color:#004578}
+.card{background:#fff;border:1px solid #d2d0ce;padding:12px;margin-bottom:12px}
+.card h3{margin:0 0 8px;font-size:13px;color:#004578}
+.cues{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.cue{background:#fff;border:1px solid #d2d0ce;border-top:4px solid #0078d4;padding:10px;cursor:pointer;min-height:78px}
+.cue.a{border-top-color:#d83b01}
+.cue span{color:#605e5c}
+.cue b{display:block;font-size:24px;margin-top:6px;color:#004578}
+.cue.a b{color:#d83b01}
+.split{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(250px,1fr);gap:12px}
+.fr{display:flex;justify-content:space-between;padding:5px 0;gap:8px;border-bottom:1px solid #edebe9}
+.fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px 18px;padding:12px}
+.fd label{display:block;color:#605e5c;font-size:11px;margin-bottom:3px}
+.fd input,.fd select,.fd textarea{width:100%;font:inherit;padding:6px 7px;border:1px solid #8a8886;background:#fff}
+.fd textarea{min-height:65px;resize:vertical}
+.btn{font:inherit;padding:5px 12px;border:1px solid #8a8886;background:#fff;cursor:pointer;margin:0 5px 6px 0;color:#201f1e}
+.btn:hover{background:#edebe9}
+.btn.p{background:#0078d4;border-color:#0078d4;color:#fff}
+.hint,.muted{color:#605e5c;font-size:11px;line-height:1.5}
+.he{padding:6px 0;border-bottom:1px solid #edebe9;overflow-wrap:anywhere}
+.docline{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid #edebe9}
+.docmeta{flex:1}
+.docicon{font-size:18px;color:#0078d4;width:28px}
+.timeline{border-left:2px solid #c8e0f4;margin:8px 0 8px 6px;padding-left:14px}
+.timeline .he{position:relative}
+.timeline .he:before{content:'';position:absolute;left:-20px;top:10px;width:7px;height:7px;border-radius:50%;background:#0078d4}
+.agenda-item{display:grid;grid-template-columns:34px 1fr;gap:8px;padding:8px;border-bottom:1px solid #edebe9}
+.agenda-item textarea{width:100%;min-height:48px;border:1px solid #d2d0ce;padding:7px;font:inherit}
+.agenda-item textarea:disabled{background:#f3f2f1;color:#605e5c;border-color:#e1dfdd;cursor:not-allowed;opacity:1}
+.lock-notice{background:#f3f2f1;border:1px solid #d2d0ce;border-left:4px solid #107c10;padding:10px;margin-bottom:12px}
+.empty{padding:24px;text-align:center;color:#605e5c;background:#fff;border:1px solid #d2d0ce}
+footer{background:#e1dfdd;color:#605e5c;padding:4px 14px;font-size:11px;display:flex;justify-content:space-between;flex-shrink:0}
+#toast{position:fixed;right:16px;bottom:34px;background:#dff6dd;color:#0b6a0b;border:1px solid #107c10;padding:8px 12px;display:none;z-index:90;max-width:440px}
+.ov{position:fixed;inset:0;background:#0006;display:none;align-items:center;justify-content:center;z-index:80;padding:12px}
+.ov.on{display:flex}
+.md{background:#fff;border:1px solid #8a8886;width:92%;max-width:580px;max-height:90vh;overflow:auto;box-shadow:0 8px 28px #0003}
+.mh{background:#004578;color:#fff;padding:10px 14px;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+.mb{padding:14px}
+.mb input,.mb select,.mb textarea{width:100%;padding:6px 7px;border:1px solid #8a8886;margin:3px 0 12px;font:inherit}
+.mb label{font-size:11px;color:#605e5c;display:block}
+.login-overlay{background:#eaf0f6;z-index:100}
+.login-panel{max-width:430px;border-color:#b9c7d5}
+.login-body{padding:26px}
+.login-logo{display:flex;align-items:center;justify-content:center;min-height:64px;margin-bottom:14px}
+.login-logo img{max-width:210px;max-height:72px;object-fit:contain}
+.login-fallback{display:none;background:#004578;color:#fff;padding:14px 20px;font-size:22px;font-weight:800;letter-spacing:2px}
+.login-body h2{text-align:center;color:#004578;font-size:20px;font-weight:600;margin:0 0 5px}
+.login-desc{text-align:center;color:#605e5c;margin:0 0 22px}
+.login-field{margin-bottom:12px}
+.login-field input{width:100%;font:inherit;padding:9px;border:1px solid #8a8886}
+.login-error{color:#a4262c;min-height:18px;font-size:11px;margin:6px 0}
+.login-submit{width:100%;padding:8px}
+.login-demo{text-align:center;font-size:11px;color:#605e5c;margin-top:12px;line-height:1.7}
+@media(max-width:900px){aside{width:200px}.split{grid-template-columns:1fr}}
+@media(max-width:720px){aside{display:none}#sr{width:130px}.who{display:none}.tb{padding:8px}.ct{padding:10px}.cues{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <img class="logo" src="https://drive.google.com/thumbnail?id=1ZPt4G_Eb2YvHfqR7PO3zg4dulEMZB0ym&sz=w200"
+      alt="KASE" onerror="this.style.display='none';document.getElementById('topFallback').style.display='inline-block'">
+    <span id="topFallback" class="brand-fallback">KASE</span>
+    <b>KASE ERP</b><span style="opacity:.65">|</span><span>Administration</span>
+  </div>
+  <div>
+    <input id="sr" list="searchHints" placeholder="Search screens or records…"
+      onkeydown="if(event.key==='Enter')globalSearch(this.value)">
+    <datalist id="searchHints">
+      <option value="Administration Dashboard">
+      <option value="T.A./D.A. Claims">
+      <option value="Digital D.A. Register">
+      <option value="Stock Requisitions">
+      <option value="Inventory Ledger">
+      <option value="Outward Register">
+      <option value="Board Members">
+      <option value="Meetings & Agenda">
+      <option value="Agenda Collaboration">
+      <option value="MoM & Resolutions">
+    </datalist>
+    <span id="who" class="who"></span>
+    <button class="so" onclick="signOut()">Sign Out</button>
+  </div>
+</header>
+
+<div id="app">
+  <aside id="nav"></aside>
+  <main id="pg"></main>
+</div>
+
+<footer>
+  <span>Kerala Academy for Skills Excellence · FY 2026–27</span>
+  <span id="ud"></span>
+</footer>
+
+<!-- ONLY TWO LOGIN ACCOUNTS -->
+<div id="login" class="ov on login-overlay">
+  <form class="md login-panel" onsubmit="signIn(event)">
+    <div class="mh">Sign in – KASE ERP · Administration</div>
+    <div class="login-body">
+      <div class="login-logo">
+        <img src="https://drive.google.com/thumbnail?id=1ZPt4G_Eb2YvHfqR7PO3zg4dulEMZB0ym&sz=w400"
+          alt="KASE logo"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <span class="login-fallback">KASE</span>
+      </div>
+      <h2>Administration Portal</h2>
+      <p class="login-desc">Sign in using your assigned username.</p>
+
+      <div class="fd login-field">
+        <label for="un">User Name</label>
+        <input id="un" name="username" type="text" autocomplete="username"
+          placeholder="Enter user name" required autofocus>
+      </div>
+
+      <div class="fd login-field">
+        <label for="pw">Password (Optional)</label>
+        <input id="pw" name="password" type="password"
+          placeholder="Enter password (not required)">
+      </div>
+
+      <div id="le" class="login-error" role="alert"></div>
+      <button class="btn p login-submit" type="submit">Sign In</button>
+
+      <div class="login-demo">
+        Available demo accounts:<br>
+        <b>admin.exec</b><br>
+        <b>admin.manager</b>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div id="modal" class="ov">
+  <div class="md">
+    <div class="mh">
+      <span id="modalTitle">Action</span>
+      <button class="so" type="button" onclick="cancelActionRemarks()">Cancel ✕</button>
+    </div>
+    <div class="mb" id="modalBody"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+
+/* ONLY TWO ACCOUNTS ARE RECOGNISED */
+const roles={
+  'admin.exec':{
+    name:'Administration Executive',
+    short:'Admin Executive',
+    key:'exec'
+  },
+  'admin.manager':{
+    name:'Administration Manager',
+    short:'Admin Manager',
+    key:'manager'
+  }
+};
+
+let role='admin.exec';
+let page='home';
+let detail=null;
+let toastTimer=null;
+let pendingRemarkAction=null;
+let expandedGroups=new Set(['Overview']);
+let agendaMeeting='BM-2026-042';
+
+const NAV=[
+  ['Overview',[['Administration Dashboard','home','▦']]],
+  ['T.A. / D.A. Management',[
+    ['T.A./D.A. Claims','claims','◫'],
+    ['Digital D.A. Register','daRegister','▤']
+  ]],
+  ['Stock & Stationery',[
+    ['Stock Requisitions','requisitions','☷'],
+    ['Inventory Ledger','inventory','▥']
+  ]],
+  ['Document Management',[
+    ['Outward Register','outward','↗']
+  ]],
+  ['Board of Directors',[
+    ['Board Members','members','♙'],
+    ['Meetings & Agenda','meetings','▦'],
+    ['Agenda Collaboration','agenda','✎'],
+    ['MoM & Resolutions','mom','▤']
+  ]]
+];
+
+const claims=[
+{
+ id:'TA-2026-018',employee:'Smt. Nandana M',empId:'EMP-KASE-0144',
+ division:'CSS',purpose:'Official meeting at District Skill Centre',
+ from:'Thiruvananthapuram',to:'Kollam',
+ start:'2026-10-12',end:'2026-10-12',
+ rate:900,travel:1240,other:0,amount:2140,
+ sanctionRef:'KASE/ADMIN/2026/092',exPostFacto:'',
+ remarks:'Journey completed as sanctioned.',adminRemarks:'',
+ proceeding:'',status:'Submitted',created:'16-Oct-2026',
+ history:[['16-Oct-2026','Employee ESS','T.A./D.A. claim submitted with journey sanction.']]
+},
+{
+ id:'TA-2026-017',employee:'Shri. Harikrishnan M',empId:'EMP-KASE-0142',
+ division:'Operations, Strategy & IT',purpose:'Network assessment visit',
+ from:'Thiruvananthapuram',to:'Kozhikode',
+ start:'2026-10-05',end:'2026-10-06',
+ rate:900,travel:2850,other:400,amount:5950,
+ sanctionRef:'',exPostFacto:'Urgent technical visit was undertaken to restore connectivity at the district office. Prior written sanction could not be obtained.',
+ remarks:'Ex-post facto brief attached.',adminRemarks:'',
+ proceeding:'',status:'Verified – Pending Manager Approval',created:'08-Oct-2026',
+ history:[
+  ['08-Oct-2026','Employee ESS','Claim submitted with ex-post facto justification.'],
+  ['10-Oct-2026','Administration Executive','Claim verified and sent to Administration Manager for approval.']
+ ]
+},
+{
+ id:'TA-2026-016',employee:'Smt. Malavika S',empId:'EMP-KASE-0143',
+ division:'Curriculum Development',purpose:'Course review meeting',
+ from:'Thiruvananthapuram',to:'Thrissur',
+ start:'2026-09-25',end:'2026-09-25',
+ rate:900,travel:980,other:0,amount:1880,
+ sanctionRef:'KASE/ADMIN/2026/071',exPostFacto:'',
+ remarks:'Claim verified and approved.',adminRemarks:'',
+ proceeding:'KASE/MD/2026/301',status:'Approved – ESS & FICO',created:'29-Sep-2026',
+ history:[
+  ['29-Sep-2026','Employee ESS','Claim submitted.'],
+  ['01-Oct-2026','Administration Executive','Claim verified.'],
+  ['03-Oct-2026','Administration Manager','Approved and reflected in Employee ESS and Finance / FICO.']
+ ]
+},
+{
+ id:'TA-2026-015',employee:'Shri. Midhun M',empId:'EMP-KASE-0134',
+ division:'Accounts',purpose:'Official meeting',
+ from:'Thiruvananthapuram',to:'Ernakulam',
+ start:'2026-09-11',end:'2026-09-11',
+ rate:900,travel:1150,other:0,amount:2050,
+ sanctionRef:'KASE/ADMIN/2026/064',exPostFacto:'',
+ remarks:'Approved claim proceeding uploaded; payment being processed.',adminRemarks:'',
+ proceeding:'KASE/MD/2026/289',status:'Finance Processing',created:'15-Sep-2026',
+ history:[
+  ['15-Sep-2026','Employee ESS','Claim submitted.'],
+  ['17-Sep-2026','Administration Executive','Verified and moved to D.A. Register.'],
+  ['19-Sep-2026','Administration Manager','Approved and routed to Finance / FICO.']
+ ]
+},
+{
+ id:'TA-2026-014',employee:'Smt. Reshmi M B',empId:'EMP-KASE-0125',
+ division:'HR and Placements',purpose:'Employer consultation',
+ from:'Thiruvananthapuram',to:'Palakkad',
+ start:'2026-08-21',end:'2026-08-22',
+ rate:900,travel:2180,other:500,amount:4480,
+ sanctionRef:'KASE/ADMIN/2026/051',exPostFacto:'',
+ remarks:'Payment completed.',adminRemarks:'',
+ proceeding:'KASE/MD/2026/260',status:'Paid',created:'25-Aug-2026',
+ history:[
+  ['25-Aug-2026','Employee ESS','Claim submitted.'],
+  ['28-Aug-2026','Administration Executive','Verified.'],
+  ['30-Aug-2026','Administration Manager','Approved and synced to ESS/FICO.'],
+  ['03-Sep-2026','Finance','Payment processed.']
+ ]
+},
+{
+ id:'TA-2026-019',employee:'Shri. Abhilash A J',empId:'EMP-KASE-0139',
+ division:'HR & Placements',purpose:'District office visit',
+ from:'Thiruvananthapuram',to:'Kottayam',
+ start:'2026-10-15',end:'2026-10-15',
+ rate:900,travel:760,other:0,amount:1660,
+ sanctionRef:'',exPostFacto:'',
+ remarks:'Journey sanction or ex-post facto brief is required.',adminRemarks:'',
+ proceeding:'',status:'Returned for Correction',created:'16-Oct-2026',
+ history:[['16-Oct-2026','Administration Executive','Returned for correction.']]
+}
+];
+
+const inventory=[
+ {id:'STK-001',name:'A4 Copier Paper – Ream',unit:'Ream',qty:124,reorder:30,location:'Central Store',value:285},
+ {id:'STK-002',name:'Blue Ballpoint Pens',unit:'Nos.',qty:86,reorder:40,location:'Central Store',value:12},
+ {id:'STK-003',name:'Office File Cover – Green',unit:'Nos.',qty:210,reorder:50,location:'Central Store',value:18},
+ {id:'STK-004',name:'Laser Printer Toner Cartridge',unit:'Nos.',qty:12,reorder:6,location:'IT / Admin Store',value:2850},
+ {id:'STK-005',name:'Official Envelopes – A4',unit:'Pack',qty:175,reorder:40,location:'Central Store',value:95},
+ {id:'STK-006',name:'Stapler Pins – Box',unit:'Box',qty:28,reorder:30,location:'Central Store',value:22}
+];
+
+const reqs=[
+{
+ id:'SR-2026-021',requester:'Smt. Nandana M',empId:'EMP-KASE-0144',
+ date:'16-Oct-2026',status:'Submitted from ESS',
+ lines:[{item:'STK-001',qty:12},{item:'STK-002',qty:20},{item:'STK-003',qty:15}],
+ notes:'Stationery required for official work.',adminRemarks:'',
+ history:[['16-Oct-2026','Employee ESS','Stock request submitted.']]
+},
+{
+ id:'SR-2026-020',requester:'Shri. Harikrishnan M',empId:'EMP-KASE-0142',
+ date:'14-Oct-2026',status:'Recommended by Administration Executive',
+ lines:[{item:'STK-001',qty:20},{item:'STK-004',qty:2}],
+ notes:'Office and network support.',adminRemarks:'Required for operational support.',
+ history:[
+  ['14-Oct-2026','Employee ESS','Stock request submitted.'],
+  ['15-Oct-2026','Administration Executive','Allocation recommended. Remarks: Required for operational support.']
+ ]
+},
+{
+ id:'SR-2026-019',requester:'Shri. Midhun M',empId:'EMP-KASE-0134',
+ date:'10-Oct-2026',status:'Approved by Administration Manager',
+ lines:[{item:'STK-001',qty:8},{item:'STK-005',qty:10}],
+ notes:'Quarterly requirement.',adminRemarks:'',
+ history:[
+  ['10-Oct-2026','Employee ESS','Stock request submitted.'],
+  ['11-Oct-2026','Administration Executive','Recommended.'],
+  ['12-Oct-2026','Administration Manager','Approved allocation.']
+ ]
+},
+{
+ id:'SR-2026-018',requester:'Shri. Anoop R',empId:'EMP-KASE-0126',
+ date:'06-Oct-2026',status:'Issued',
+ lines:[{item:'STK-002',qty:10},{item:'STK-003',qty:25}],
+ notes:'Routine stationery issue.',adminRemarks:'',
+ history:[
+  ['06-Oct-2026','Employee ESS','Stock request submitted.'],
+  ['07-Oct-2026','Administration Manager','Approved.'],
+  ['08-Oct-2026','Administration Executive','Stock issued and ledger updated.']
+ ]
+}
+];
+
+let ledger=[
+ {date:'17-Oct-2026',item:'A4 Copier Paper – Ream',type:'Stock Inflow',qty:40,ref:'GRN-2026-044',location:'Central Store',by:'Administration Executive'},
+ {date:'16-Oct-2026',item:'Blue Ballpoint Pens',type:'Distribution',qty:-12,ref:'SR-2026-018',employee:'Shri. Anoop R',by:'Administration Executive'},
+ {date:'15-Oct-2026',item:'Laser Printer Toner Cartridge',type:'Distribution',qty:-2,ref:'SR-2026-016',employee:'Shri. Harikrishnan M',by:'Administration Executive'},
+ {date:'10-Oct-2026',item:'Official Envelopes – A4',type:'Stock Inflow',qty:50,ref:'GRN-2026-039',location:'Central Store',by:'Administration Executive'}
+];
+
+let outward=[
+ {id:'OUT-2026-184',date:'17-Oct-2026',recipient:'Director, Employment',address:'Thiruvananthapuram',subject:'Forwarding of quarterly skill development report',division:'Skill Development',mode:'Email + Special Messenger',ref:'KASE/SD/2026/184',status:'Dispatched'},
+ {id:'OUT-2026-183',date:'16-Oct-2026',recipient:'The Principal Secretary, Labour & Skills Department',address:'Government Secretariat, Thiruvananthapuram',subject:'Submission of project progress statement',division:'Projects',mode:'eOffice / Email',ref:'KASE/PROJ/2026/261',status:'Dispatched'},
+ {id:'OUT-2026-182',date:'15-Oct-2026',recipient:'Kerala State IT Mission',address:'Thiruvananthapuram',subject:'Request for technical coordination meeting',division:'Operations, Strategy & IT',mode:'Email',ref:'KASE/IT/2026/151',status:'Ready for Dispatch'}
+];
+
+let members=[
+ {id:'BM-001',name:'Board Member A',designation:'Chairperson',organisation:'Government of Kerala',email:'chairperson@example.invalid',phone:'—',from:'2024-06-01',to:'2027-05-31',status:'Active'},
+ {id:'BM-002',name:'Board Member B',designation:'Member',organisation:'Government Nominee',email:'member.b@example.invalid',phone:'—',from:'2024-06-01',to:'2027-05-31',status:'Active'},
+ {id:'BM-003',name:'Board Member C',designation:'Member',organisation:'Industry Representative',email:'member.c@example.invalid',phone:'—',from:'2025-01-15',to:'2028-01-14',status:'Active'},
+ {id:'BM-004',name:'Former Board Member D',designation:'Former Member',organisation:'Former Nominee',email:'former.d@example.invalid',phone:'—',from:'2021-06-01',to:'2024-05-31',status:'Former'}
+];
+
+let meetings=[
+ {
+  id:'BM-2026-042',no:'42',title:'42nd Meeting of the Board of Directors',
+  date:'2026-11-12',time:'11:00',venue:'KASE Head Office, Thiruvananthapuram',
+  status:'Scheduled',agendaStatus:'Draft',
+  agenda:['Confirmation of minutes of the previous meeting','Review of ongoing skill park projects','Consideration of revised annual action plan'],
+  mom:'',resolutions:[]
+ },
+ {
+  id:'BM-2026-041',no:'41',title:'41st Meeting of the Board of Directors',
+  date:'2026-08-18',time:'11:30',venue:'KASE Head Office',
+  status:'Completed',agendaStatus:'Finalised',
+  agenda:['Approval of previous minutes','Review of project expenditure'],
+  mom:'MoM-BM-2026-041.pdf',
+  resolutions:[
+   {no:'41/1',text:'The minutes of the previous meeting were confirmed.'},
+   {no:'41/2',text:'The project progress statement was noted.'}
+  ]
+ }
+];
+
+let momRecords=[
+ {
+  id:'MOM-2026-041',title:'Minutes – 41st Board Meeting',
+  meeting:'BM-2026-041',date:'18-Aug-2026',status:'Finalised',
+  file:'MoM-BM-2026-041.pdf',
+  resolutions:[
+   {no:'41/1',text:'The minutes of the previous meeting were confirmed.'},
+   {no:'41/2',text:'The project progress statement was noted.'}
+  ]
+ }
+];
+
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const dateToday=()=>new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+const money=n=>'Rs. '+Number(n||0).toLocaleString('en-IN');
+const roleKey=()=>roles[role].key;
+const itemById=id=>inventory.find(i=>i.id===id)||{name:id,unit:'Nos.',qty:0};
+
+/* LOGIN: ONLY admin.exec AND admin.manager */
+
+function signIn(e){
+ e.preventDefault();
+ const username=$('un').value.trim().toLowerCase();
+
+ if(!Object.prototype.hasOwnProperty.call(roles,username)){
+  $('le').textContent='Invalid username. Use admin.exec or admin.manager.';
+  return;
+ }
+
+ role=username;
+ $('le').textContent='';
+ $('pw').value='';
+ $('login').classList.remove('on');
+
+ page='home';
+ detail=null;
+ expandedGroups=new Set(['Overview']);
+
+ render();
+ toast('Signed in as '+roles[role].name);
+}
+
+function signOut(){
+ $('login').classList.add('on');
+ $('un').value='';
+ $('pw').value='';
+ $('un').focus();
+}
+
+function toast(message){
+ const t=$('toast');
+ t.textContent='✓ '+message;
+ t.style.display='block';
+ clearTimeout(toastTimer);
+ toastTimer=setTimeout(()=>t.style.display='none',3500);
+}
+
+/* NAVIGATION */
+
+function toggleNavGroup(group){
+ if(expandedGroups.has(group))expandedGroups.delete(group);
+ else expandedGroups.add(group);
+ renderNav();
+}
+
+function expandGroupForPage(k){
+ for(const [group,items] of NAV){
+  if(items.some(i=>i[1]===k))expandedGroups.add(group);
+ }
+}
+
+function renderNav(){
+ let html='';
+
+ NAV.forEach(([group,items])=>{
+  const open=expandedGroups.has(group);
+
+  html+=`<button class="nav-group-head" onclick="toggleNavGroup('${esc(group)}')" aria-expanded="${open}">
+    <span>${esc(group.toUpperCase())}</span><span class="nav-chevron">›</span>
+  </button>
+  <div class="nav-items ${open?'expanded':''}" style="display:${open?'block':'none'}">
+    ${items.map(([label,key,icon])=>`<button class="ni ${page===key&&!detail?'on':''}" onclick="go('${key}')"><span style="display:inline-block;width:20px;color:#0078d4">${icon}</span>${label}</button>`).join('')}
+  </div>`;
+ });
+
+ $('nav').innerHTML=html;
+ $('who').textContent=roles[role].short;
+}
+
+function go(k){
+ page=k;
+ detail=null;
+ expandGroupForPage(k);
+ render();
+}
+
+function openDetail(type,id){
+ detail={type,id};
+ render();
+}
+
+function back(){
+ detail=null;
+ render();
+}
+
+/* UI HELPERS */
+
+function badge(s){
+ let c='';
+ if(/Approved|Paid|Dispatched|Issued|Active|Finalised|Completed/.test(s))c='g';
+ else if(/Returned|Correction|Rejected|Urgent|Reorder/.test(s))c='r';
+ else if(/Verified|Processing|Recommended|Scheduled|Submitted|Draft|Awaiting/.test(s))c='';
+ else c='b';
+
+ return `<span class="bd ${c}">${esc(s)}</span>`;
+}
+
+function btn(label,fn,primary=false){
+ return `<button class="btn ${primary?'p':''}" onclick="${fn}">${label}</button>`;
+}
+
+function field(label,value){
+ return `<div class="fd"><label>${esc(label)}</label><input value="${esc(value)}" disabled></div>`;
+}
+
+function table(headers,rows){
+ return `<div class="tw"><table><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows||`<tr><td colspan="${headers.length}" class="muted">No records found.</td></tr>`}</tbody></table></div>`;
+}
+
+function listFilter(placeholder,extra=''){
+ return `<div class="fp"><label>Search</label><input id="listSearch" placeholder="${placeholder}" oninput="filterRows()">${extra}</div>`;
+}
+
+function filterRows(){
+ const q=($('listSearch')?.value||'').toLowerCase();
+ document.querySelectorAll('#dataTable tbody tr').forEach(tr=>{
+  tr.style.display=tr.innerText.toLowerCase().includes(q)?'':'none';
+ });
+}
+
+/* RIBBON */
+
+function ribbon(){
+ let actions=[];
+
+ if(detail){
+  actions=[['Back','back()','←'],['Refresh','render()','↻']];
+ }else if(page==='claims'){
+  actions=[['Export Register','exportTable()','▦'],['Refresh','render()','↻']];
+ }else if(page==='daRegister'){
+  actions=[['Open Claims','go("claims")','▤'],['Refresh','render()','↻']];
+ }else if(page==='requisitions'){
+  actions=[['Refresh','render()','↻']];
+ }else if(page==='inventory'){
+  actions=[['Record Stock Inflow','newStockInflow()','＋'],['Refresh','render()','↻']];
+ }else if(page==='outward'){
+  actions=[['New Outward','newOutward()','＋'],['Refresh','render()','↻']];
+ }else if(page==='members'){
+  actions=[['New Member','newMember()','＋'],['Refresh','render()','↻']];
+ }else if(page==='meetings'){
+  actions=[['Schedule Meeting','newMeeting()','＋'],['Refresh','render()','↻']];
+ }else if(page==='agenda'){
+  const m=meetings.find(x=>x.id===agendaMeeting);
+  actions=[['Refresh','render()','↻']];
+  if(m&&m.agendaStatus!=='Finalised'){
+   actions.unshift(['Save Agenda','saveAgenda()','✓']);
+  }
+ }
+
+ const group=actions.map(a=>
+  `<button class="rbn" onclick="${a[1]}"><i>${a[2]}</i>${a[0]}</button>`
+ ).join('');
+
+ return `<div class="rb"><div class="rt">HOME</div><div class="rgs"><div class="rg"><div class="bs">${group}</div><small>Actions</small></div></div></div>`;
+}
+
+function render(){
+ renderNav();
+ $('ud').textContent='System date: '+dateToday()+' · '+roles[role].short;
+
+ const names={
+  home:'Administration Dashboard',
+  claims:'T.A./D.A. Claims',
+  daRegister:'Digital D.A. Register',
+  requisitions:'Stock Requisitions',
+  inventory:'Inventory Ledger',
+  outward:'Outward Register',
+  members:'Board Members',
+  meetings:'Meetings & Agenda',
+  agenda:'Agenda Collaboration',
+  mom:'MoM & Resolutions'
+ };
+
+ const detailNames={
+  claim:'T.A./D.A. Claim',
+  req:'Employee Stock Request',
+  outward:'Outward Communication',
+  member:'Board Member',
+  meeting:'Board Meeting',
+  mom:'Minutes of Meeting'
+ };
+
+ const title=detail?detailNames[detail.type]||'Record':names[page]||'Administration';
+
+ $('pg').innerHTML=`
+  <div class="tb">
+   <div>
+    <div class="cr">KASE ERP › Administration › ${esc(title)}</div>
+    <h1>${esc(title)}</h1>
+    <div class="sub">${detail?'Record details and permitted actions':''}</div>
+   </div>
+  </div>
+  ${ribbon()}
+  <div class="ct">${pageContent()}</div>`;
+}
+
+function pageContent(){
+ if(detail)return detailContent();
+ if(page==='home')return homePage();
+ if(page==='claims')return claimsPage(false);
+ if(page==='daRegister')return claimsPage(true);
+ if(page==='requisitions')return reqPage();
+ if(page==='inventory')return inventoryPage();
+ if(page==='outward')return outwardPage();
+ if(page==='members')return membersPage();
+ if(page==='meetings')return meetingsPage();
+ if(page==='agenda')return agendaPage();
+ if(page==='mom')return momPage();
+ return '<div class="empty">Screen not found.</div>';
+}
+
+/* DASHBOARD */
+
+function homePage(){
+ const isManager=roleKey()==='manager';
+
+ const submitted=claims.filter(c=>c.status==='Submitted').length;
+ const pending=claims.filter(c=>c.status==='Verified – Pending Manager Approval').length;
+ const approved=claims.filter(c=>['Approved – ESS & FICO','Finance Processing','Paid'].includes(c.status)).length;
+ const submittedReq=reqs.filter(r=>r.status==='Submitted from ESS').length;
+ const recommended=reqs.filter(r=>r.status==='Recommended by Administration Executive').length;
+ const low=inventory.filter(i=>i.qty<=i.reorder).length;
+
+ const stats=isManager
+  ?[['Claims awaiting approval',pending,'daRegister'],['Stock requests for approval',recommended,'requisitions'],['Claims in ESS / FICO',approved,'claims'],['Low-stock items',low,'inventory']]
+  :[['ESS claims to verify',submitted,'claims'],['Stock requests to recommend',submittedReq,'requisitions'],['Claims in ESS / FICO',approved,'claims'],['Low-stock items',low,'inventory']];
+
+ const work=claims.filter(c=>
+  isManager?c.status==='Verified – Pending Manager Approval':c.status==='Submitted'
+ ).slice(0,5);
+
+ const stockWork=reqs.filter(r=>
+  isManager?r.status==='Recommended by Administration Executive':r.status==='Submitted from ESS'
+ ).slice(0,5);
+
+ return `
+  <div class="cues">${stats.map((s,i)=>`
+   <div class="cue ${i===1?'a':''}" onclick="go('${s[2]}')">
+    <span>${esc(s[0])}</span><b>${s[1]}</b><small class="muted">Open register</small>
+   </div>`).join('')}
+  </div>
+  <div class="split">
+   <div>
+    <div class="card"><h3>${isManager?'Manager Approval Queue':'Administration Executive Work Queue'}</h3>
+     ${table(['Reference','Work Item','Employee','Status'],
+       work.map(c=>`<tr onclick="openDetail('claim','${c.id}')"><td><b>${c.id}</b></td><td>${esc(c.purpose)}</td><td>${esc(c.employee)}</td><td>${badge(c.status)}</td></tr>`).join('')+
+       stockWork.map(r=>`<tr onclick="openDetail('req','${r.id}')"><td><b>${r.id}</b></td><td>Employee stock request</td><td>${esc(r.requester)}</td><td>${badge(r.status)}</td></tr>`).join('')
+     )}
+    </div>
+    <div class="card"><h3>Board Meetings</h3>
+     <div class="fr"><span>Next meeting</span><b>${esc(meetings.find(m=>m.status==='Scheduled')?.title||'—')}</b></div>
+     <div class="fr"><span>Date</span><b>${meetings.find(m=>m.status==='Scheduled')?.date||'—'}</b></div>
+     ${btn('Open Meetings',"go('meetings')")}
+     ${btn('Open Agenda Workspace',"go('agenda')")}
+    </div>
+   </div>
+   <div class="card"><h3>Quick Access</h3>
+    ${[['T.A./D.A. Claims','claims','▤'],['Digital D.A. Register','daRegister','✓'],['Stock Requisitions','requisitions','☷'],['Inventory Ledger','inventory','▥'],['Outward Register','outward','↗']].map(a=>
+     `<div class="docline"><span class="docicon">${a[2]}</span><span class="docmeta">${a[0]}</span>${btn('Open',`go('${a[1]}')`)}</div>`
+    ).join('')}
+    <p class="hint">T.A./D.A. claims and stock requests originate in Employee ESS. This module handles administrative verification, approvals and stock issue.</p>
+   </div>
+  </div>`;
+}
+
+/* CLAIM REGISTER */
+
+function claimsPage(da){
+ let data=claims.filter(c=>!da||
+  ['Verified – Pending Manager Approval','Approved – ESS & FICO','Finance Processing','Paid'].includes(c.status));
+
+ return `
+  ${listFilter('Claim ID, employee or purpose…',`<label>Status</label><select id="statusFilter" onchange="filterClaimStatus()"><option value="">All statuses</option>${[...new Set(claims.map(c=>c.status))].map(s=>`<option>${esc(s)}</option>`).join('')}</select><span>${data.length} record(s)</span>`)}
+  <div id="claimTable">${table(['Claim ID','Employee','Purpose','Journey','Claim Amount','Submitted','Status'],
+   data.map(c=>`<tr onclick="openDetail('claim','${c.id}')">
+    <td><b>${c.id}</b></td>
+    <td>${esc(c.employee)}<br><small class="muted">${esc(c.division)}</small></td>
+    <td>${esc(c.purpose)}</td>
+    <td>${esc(c.from)} → ${esc(c.to)}<br><small class="muted">${c.start} to ${c.end}</small></td>
+    <td>${money(c.amount)}</td><td>${esc(c.created)}</td><td>${badge(c.status)}</td>
+   </tr>`).join(''))}
+  </div>
+  <p class="hint">Claims are submitted through Employee ESS. New claims cannot be created within this Administration register.</p>`;
+}
+
+function filterClaimStatus(){
+ const v=$('statusFilter').value;
+ document.querySelectorAll('#claimTable tbody tr').forEach(tr=>{
+  tr.style.display=(!v||tr.innerText.includes(v))?'':'none';
+ });
+}
+
+/* CLAIM DETAIL AND WORKFLOW */
+
+function claimDetail(c){
+ if(!c)return '';
+
+ let actions='';
+
+ if(roleKey()==='exec'&&['Submitted','Returned for Correction'].includes(c.status)){
+  actions+=btn('Verify & Send to Manager',`claimAction('${c.id}','verify')`,true);
+  actions+=btn('Return to Employee ESS',`claimAction('${c.id}','return')`);
+ }
+
+ if(roleKey()==='manager'&&c.status==='Verified – Pending Manager Approval'){
+  actions+=btn('Approve Claim',`claimAction('${c.id}','approve')`,true);
+  actions+=btn('Return for Correction',`claimAction('${c.id}','return')`);
+ }
+
+ return `
+  <div class="card"><h3>Claim Details</h3><div class="fg">
+   ${field('Claim Reference',c.id)}
+   ${field('Employee',c.employee+' · '+c.empId)}
+   ${field('Division',c.division)}
+   ${field('Purpose of Journey',c.purpose)}
+   ${field('From',c.from)}
+   ${field('To',c.to)}
+   ${field('Journey Start',c.start)}
+   ${field('Journey End',c.end)}
+   ${field('D.A. Rate / Day',money(c.rate))}
+   ${field('Travel and Other Expenses',money(c.travel+c.other))}
+   ${field('Total Claim',money(c.amount))}
+   ${field('Current Status',c.status)}
+   ${field('Journey Sanction Reference',c.sanctionRef||'Not provided')}
+   ${field('eOffice Proceeding Reference',c.proceeding||'Not uploaded')}
+   <div class="fd" style="grid-column:1/-1"><label>Ex-post Facto Justification</label><textarea disabled>${esc(c.exPostFacto||'Not applicable / not provided')}</textarea></div>
+   <div class="fd" style="grid-column:1/-1"><label>Employee Remarks</label><textarea disabled>${esc(c.remarks||'—')}</textarea></div>
+   <div class="fd" style="grid-column:1/-1"><label>Latest Administrative Remarks</label><textarea disabled>${esc(c.adminRemarks||'No administrative remarks recorded.')}</textarea></div>
+  </div></div>
+  <div class="card"><h3>Record History & Remarks</h3><div class="timeline">
+   ${c.history.map(h=>`<div class="he"><b>${esc(h[0])} · ${esc(h[1])}</b><br>${esc(h[2])}</div>`).join('')}
+  </div></div>
+  ${actions?`<div class="card"><h3>Permitted Actions</h3>${actions}</div>`:''}`;
+}
+
+function claimAction(id,action){
+ const c=claims.find(x=>x.id===id);
+ if(!c)return;
+
+ if(action==='return'){
+  askActionRemarks('claim',id,action,'Return Claim to Employee ESS',
+   'Specify the corrections, missing information or supporting documents required from the employee.');
+  return;
+ }
+
+ performClaimAction(id,action,'');
+}
+
+function performClaimAction(id,action,remarks=''){
+ const c=claims.find(x=>x.id===id);
+ if(!c)return;
+
+ if(action==='verify'){
+  if(!c.sanctionRef&&!c.exPostFacto){
+   toast('A journey sanction reference or ex-post facto justification is required.');
+   return;
+  }
+  c.status='Verified – Pending Manager Approval';
+  c.history.push([dateToday(),roles[role].name,'Claim verified and sent to Administration Manager for approval.']);
+
+ }else if(action==='approve'){
+  c.status='Approved – ESS & FICO';
+  c.history.push([dateToday(),roles[role].name,'Claim approved. The approved claim is reflected in Employee ESS and Finance / FICO.']);
+
+ }else if(action==='return'){
+  if(!remarks.trim()){
+   toast('Remarks are mandatory when returning a claim.');
+   return;
+  }
+  c.status='Returned for Correction';
+  c.adminRemarks=remarks.trim();
+  c.history.push([dateToday(),roles[role].name,'Claim returned to Employee ESS. Remarks: '+remarks.trim()]);
+ }
+
+ detail={type:'claim',id};
+ render();
+ toast('Claim status updated.');
+}
+
+/* STOCK REQUESTS */
+
+function reqPage(){
+ return `
+  ${listFilter('Request ID, employee or stock item…')}
+  <div id="dataTable">${table(['Request ID','Requested By','Items & Quantities','Request Date','Status'],
+   reqs.map(r=>`<tr onclick="openDetail('req','${r.id}')">
+    <td><b>${r.id}</b></td>
+    <td>${esc(r.requester)}<br><small class="muted">${esc(r.empId)}</small></td>
+    <td>${r.lines.map(l=>`${esc(itemById(l.item).name)} × ${l.qty}`).join('<br>')}</td>
+    <td>${esc(r.date)}</td><td>${badge(r.status)}</td>
+   </tr>`).join(''))}
+  </div>
+  <p class="hint">Employee requests are processed individually against available company stock. Division-wise consolidation is not used.</p>`;
+}
+
+function reqDetail(r){
+ if(!r)return '';
+ let actions='';
+
+ if(roleKey()==='exec'&&r.status==='Submitted from ESS'){
+  actions+=btn('Recommend Allocation',`reqAction('${r.id}','recommend')`,true);
+  actions+=btn('Return to Employee',`reqAction('${r.id}','return')`);
+ }
+
+ if(roleKey()==='manager'&&r.status==='Recommended by Administration Executive'){
+  actions+=btn('Approve Allocation',`reqAction('${r.id}','approve')`,true);
+  actions+=btn('Return for Review',`reqAction('${r.id}','return')`);
+ }
+
+ if(roleKey()==='exec'&&r.status==='Approved by Administration Manager'){
+  actions+=btn('Issue Stock & Update Ledger',`reqAction('${r.id}','issue')`,true);
+ }
+
+ return `
+  <div class="card"><h3>Employee Stock Request</h3><div class="fg">
+   ${field('Request ID',r.id)}
+   ${field('Requested By',r.requester+' · '+r.empId)}
+   ${field('Request Date',r.date)}
+   ${field('Current Status',r.status)}
+   <div class="fd" style="grid-column:1/-1"><label>Purpose / Notes</label><textarea disabled>${esc(r.notes||'—')}</textarea></div>
+   <div class="fd" style="grid-column:1/-1"><label>Latest Administrative Remarks</label><textarea disabled>${esc(r.adminRemarks||'No administrative remarks recorded.')}</textarea></div>
+  </div></div>
+
+  <div class="card"><h3>Requested Items</h3>
+   ${table(['Item Code','Stock Item','Available Quantity','Requested Quantity','Unit'],
+    r.lines.map(l=>{
+     const i=itemById(l.item);
+     return `<tr><td>${i.id}</td><td>${esc(i.name)}</td><td>${i.qty}</td><td>${l.qty}</td><td>${esc(i.unit)}</td></tr>`;
+    }).join(''))}
+  </div>
+
+  ${actions?`<div class="card"><h3>Permitted Actions</h3>${actions}</div>`:''}
+
+  <div class="card"><h3>Request History & Remarks</h3>
+   ${r.history.map(h=>`<div class="he"><b>${esc(h[0])} · ${esc(h[1])}</b><br>${esc(h[2])}</div>`).join('')}
+  </div>`;
+}
+
+function reqAction(id,action){
+ const r=reqs.find(x=>x.id===id);
+ if(!r)return;
+
+ if(action==='recommend'){
+  askActionRemarks('req',id,action,'Recommend Stock Allocation',
+   'Record the basis for recommending allocation from available company stock.');
+  return;
+ }
+
+ if(action==='return'){
+  askActionRemarks('req',id,action,'Return Stock Request',
+   'Specify why the request is being returned and what must be corrected or clarified.');
+  return;
+ }
+
+ performReqAction(id,action,'');
+}
+
+function performReqAction(id,action,remarks=''){
+ const r=reqs.find(x=>x.id===id);
+ if(!r)return;
+
+ if(action==='recommend'){
+  if(!remarks.trim()){
+   toast('Remarks are mandatory when recommending stock allocation.');
+   return;
+  }
+
+  for(const l of r.lines){
+   if(itemById(l.item).qty<l.qty){
+    toast('Insufficient stock for '+itemById(l.item).name+'.');
+    return;
+   }
+  }
+
+  r.status='Recommended by Administration Executive';
+  r.adminRemarks=remarks.trim();
+  r.history.push([dateToday(),roles[role].name,'Allocation recommended. Remarks: '+remarks.trim()]);
+
+ }else if(action==='approve'){
+  r.status='Approved by Administration Manager';
+  r.history.push([dateToday(),roles[role].name,'Stock allocation approved by Administration Manager.']);
+
+ }else if(action==='return'){
+  if(!remarks.trim()){
+   toast('Remarks are mandatory when returning a stock request.');
+   return;
+  }
+
+  r.status='Returned to Employee ESS';
+  r.adminRemarks=remarks.trim();
+  r.history.push([dateToday(),roles[role].name,'Stock request returned to employee. Remarks: '+remarks.trim()]);
+
+ }else if(action==='issue'){
+  for(const l of r.lines){
+   if(itemById(l.item).qty<l.qty){
+    toast('Insufficient available stock for '+itemById(l.item).name+'.');
+    return;
+   }
+  }
+
+  for(const l of r.lines){
+   const i=itemById(l.item);
+   i.qty-=Number(l.qty);
+   ledger.unshift({
+    date:dateToday(),item:i.name,type:'Distribution',qty:-Number(l.qty),
+    ref:r.id,employee:r.requester,by:roles[role].name
+   });
+  }
+
+  r.status='Issued';
+  r.history.push([dateToday(),roles[role].name,'Stock issued to employee; inventory ledger updated.']);
+ }
+
+ detail={type:'req',id};
+ render();
+ toast('Stock request updated.');
+}
+
+/* REQUIRED REMARKS DIALOG */
+
+function askActionRemarks(type,id,action,title,instruction){
+ pendingRemarkAction={type,id,action};
+
+ modal(title,`
+  <p class="hint">${esc(instruction)}</p>
+  <label for="actionRemarks">Remarks <span style="color:#a4262c">*</span></label>
+  <textarea id="actionRemarks" rows="5" placeholder="Enter remarks..." required></textarea>
+  <div id="actionRemarkError" class="login-error" role="alert"></div>
+  <div style="text-align:right">
+   <button class="btn" onclick="cancelActionRemarks()">Cancel</button>
+   <button class="btn p" onclick="submitActionRemarks()">Confirm Action</button>
+  </div>
+ `);
+
+ setTimeout(()=>$('actionRemarks')?.focus(),50);
+}
+
+function submitActionRemarks(){
+ const remarks=($('actionRemarks')?.value||'').trim();
+
+ if(!remarks){
+  $('actionRemarkError').textContent='Remarks are required to continue.';
+  $('actionRemarks').focus();
+  return;
+ }
+
+ if(!pendingRemarkAction)return;
+
+ const p=pendingRemarkAction;
+ pendingRemarkAction=null;
+ closeModal();
+
+ if(p.type==='claim'){
+  performClaimAction(p.id,p.action,remarks);
+ }else{
+  performReqAction(p.id,p.action,remarks);
+ }
+}
+
+function cancelActionRemarks(){
+ pendingRemarkAction=null;
+ closeModal();
+}
+
+/* INVENTORY LEDGER */
+
+function inventoryPage(){
+ return `
+  ${listFilter('Item code or description…')}
+  <div id="dataTable">${table(['Item Code','Item Description','Unit','Available Quantity','Reorder Level','Location','Unit Value','Stock Status'],
+   inventory.map(i=>`<tr>
+    <td><b>${i.id}</b></td><td>${esc(i.name)}</td><td>${esc(i.unit)}</td>
+    <td>${i.qty}</td><td>${i.reorder}</td><td>${esc(i.location)}</td><td>${money(i.value)}</td>
+    <td>${i.qty<=i.reorder?badge('Reorder Required'):badge('In Stock')}</td>
+   </tr>`).join(''))}
+  </div>
+  <div class="card"><h3>Inventory Movement Ledger</h3>
+   ${table(['Date','Item','Movement','Quantity','Reference','Recipient / Location','Recorded By'],
+    ledger.map(l=>`<tr><td>${esc(l.date)}</td><td>${esc(l.item)}</td><td>${esc(l.type)}</td><td>${l.qty>0?'+':''}${l.qty}</td><td>${esc(l.ref)}</td><td>${esc(l.employee||l.location||'—')}</td><td>${esc(l.by)}</td></tr>`).join(''))}
+  </div>`;
+}
+
+function newStockInflow(){
+ modal('Record Company Stock Purchase / Inflow',`
+  <label>Stock Item</label>
+  <select id="inItem">${inventory.map(i=>`<option value="${i.id}">${esc(i.name)}</option>`).join('')}</select>
+  <label>Quantity Received</label><input id="inQty" type="number" min="1" value="1">
+  <label>Purchase / GRN Reference</label><input id="inRef" placeholder="e.g. GRN-2026-045">
+  <label>Storage Location</label><input id="inLoc" value="Central Store">
+  <button class="btn p" onclick="saveStockInflow()">Record Stock Inflow</button>
+ `);
+}
+
+function saveStockInflow(){
+ const item=itemById($('inItem').value);
+ const qty=Number($('inQty').value);
+ const ref=$('inRef').value.trim()||'GRN-'+Date.now();
+ const loc=$('inLoc').value.trim()||item.location;
+
+ if(qty<1){
+  toast('Quantity must be greater than zero.');
+  return;
+ }
+
+ item.qty+=qty;
+ item.location=loc;
+
+ ledger.unshift({
+  date:dateToday(),item:item.name,type:'Stock Inflow',qty,ref,
+  location:loc,by:roles[role].name
+ });
+
+ closeModal();
+ render();
+ toast('Inventory ledger updated.');
+}
+
+/* OUTWARD REGISTER */
+
+function outwardPage(){
+ return `
+  ${listFilter('Outward number, recipient or subject…')}
+  <div id="dataTable">${table(['Register No.','Dispatch Date','Recipient','Subject','Division','Dispatch Mode','Reference','Status'],
+   outward.map(o=>`<tr onclick="openDetail('outward','${o.id}')">
+    <td><b>${o.id}</b></td><td>${esc(o.date)}</td>
+    <td>${esc(o.recipient)}<br><small class="muted">${esc(o.address)}</small></td>
+    <td>${esc(o.subject)}</td><td>${esc(o.division)}</td><td>${esc(o.mode)}</td><td>${esc(o.ref)}</td><td>${badge(o.status)}</td>
+   </tr>`).join(''))}
+  </div>`;
+}
+
+function outwardDetail(o){
+ return `<div class="card"><h3>Outward Communication Details</h3><div class="fg">
+  ${field('Register Reference',o.id)}
+  ${field('Dispatch Date',o.date)}
+  ${field('Recipient',o.recipient)}
+  ${field('Address',o.address)}
+  ${field('Dispatching Division',o.division)}
+  ${field('Dispatch Mode',o.mode)}
+  ${field('Official Reference',o.ref)}
+  ${field('Status',o.status)}
+  <div class="fd" style="grid-column:1/-1"><label>Subject</label><textarea disabled>${esc(o.subject)}</textarea></div>
+ </div></div>`;
+}
+
+function newOutward(){
+ modal('New Outward Register Entry',`
+  <label>Recipient *</label><input id="oRecipient">
+  <label>Address</label><input id="oAddress">
+  <label>Dispatch Date</label><input id="oDate" type="date" value="${new Date().toISOString().slice(0,10)}">
+  <label>Subject *</label><textarea id="oSubject"></textarea>
+  <label>Dispatching Division</label><input id="oDivision" value="Administration">
+  <label>Dispatch Mode</label>
+  <select id="oMode"><option>Email</option><option>eOffice / Email</option><option>Registered Post</option><option>Special Messenger</option><option>Email + Special Messenger</option></select>
+  <label>Official Reference</label><input id="oRef">
+  <button class="btn p" onclick="saveOutward()">Save Register Entry</button>
+ `);
+}
+
+function saveOutward(){
+ const recipient=$('oRecipient').value.trim();
+ const subject=$('oSubject').value.trim();
+
+ if(!recipient||!subject){
+  toast('Recipient and subject are required.');
+  return;
+ }
+
+ const id='OUT-2026-'+String(185+outward.length-3).padStart(3,'0');
+
+ outward.unshift({
+  id,date:$('oDate').value||dateToday(),recipient,
+  address:$('oAddress').value,subject,division:$('oDivision').value,
+  mode:$('oMode').value,ref:$('oRef').value,status:'Ready for Dispatch'
+ });
+
+ closeModal();
+ go('outward');
+ toast('Outward register entry created.');
+}
+
+/* BOARD MEMBERS */
+
+function membersPage(){
+ return `
+  ${listFilter('Member name, organisation or ID…')}
+  <div id="dataTable">${table(['Member ID','Name','Designation','Organisation','Tenure','Email','Status'],
+   members.map(m=>`<tr onclick="openDetail('member','${m.id}')">
+    <td><b>${m.id}</b></td><td>${esc(m.name)}</td><td>${esc(m.designation)}</td><td>${esc(m.organisation)}</td>
+    <td>${esc(m.from)} – ${esc(m.to)}</td><td>${esc(m.email)}</td><td>${badge(m.status)}</td>
+   </tr>`).join(''))}
+  </div>`;
+}
+
+function memberDetail(m){
+ return `<div class="card"><h3>Board Member Profile</h3><div class="fg">
+  ${field('Member ID',m.id)}
+  ${field('Name',m.name)}
+  ${field('Designation',m.designation)}
+  ${field('Organisation',m.organisation)}
+  ${field('Email',m.email)}
+  ${field('Contact Number',m.phone)}
+  ${field('Tenure Start',m.from)}
+  ${field('Tenure End',m.to)}
+  ${field('Status',m.status)}
+ </div></div>`;
+}
+
+function newMember(){
+ modal('New Board Member',`
+  <label>Name *</label><input id="mName">
+  <label>Designation</label><input id="mDes">
+  <label>Organisation</label><input id="mOrg">
+  <label>Email</label><input id="mEmail" type="email">
+  <label>Contact Number</label><input id="mPhone">
+  <label>Tenure Start</label><input id="mFrom" type="date">
+  <label>Tenure End</label><input id="mTo" type="date">
+  <button class="btn p" onclick="saveMember()">Save Board Member</button>
+ `);
+}
+
+function saveMember(){
+ const name=$('mName').value.trim();
+ if(!name){toast('Enter the member name.');return;}
+
+ members.unshift({
+  id:'BM-'+String(members.length+1).padStart(3,'0'),
+  name,designation:$('mDes').value,organisation:$('mOrg').value,
+  email:$('mEmail').value,phone:$('mPhone').value,
+  from:$('mFrom').value,to:$('mTo').value,status:'Active'
+ });
+
+ closeModal();
+ go('members');
+ toast('Board Member profile saved.');
+}
+
+/* BOARD MEETINGS */
+
+function meetingsPage(){
+ return `
+  ${listFilter('Meeting number, title or date…')}
+  <div id="dataTable">${table(['Reference','Meeting','Date & Time','Venue','Agenda Status','Meeting Status','Actions'],
+   meetings.map(m=>`<tr onclick="openDetail('meeting','${m.id}')">
+    <td><b>${m.id}</b></td><td>${esc(m.title)}</td><td>${esc(m.date)} · ${esc(m.time)}</td>
+    <td>${esc(m.venue)}</td><td>${badge(m.agendaStatus)}</td><td>${badge(m.status)}</td>
+    <td>${btn('Open Agenda',`openAgendaMeeting('${m.id}')`)}</td>
+   </tr>`).join(''))}
+  </div>`;
+}
+
+function meetingDetail(m){
+ return `<div class="card"><h3>Board Meeting</h3><div class="fg">
+  ${field('Meeting Reference',m.id)}
+  ${field('Meeting Number',m.no)}
+  ${field('Meeting Title',m.title)}
+  ${field('Date & Time',m.date+' · '+m.time)}
+  ${field('Venue',m.venue)}
+  ${field('Status',m.status)}
+ </div><h3>Agenda</h3>
+ ${m.agenda.map((a,i)=>`<div class="he"><b>${i+1}.</b> ${esc(a)}</div>`).join('')}
+ <div style="margin-top:10px">${btn('Open Agenda Workspace',`openAgendaMeeting('${m.id}')`)}${m.mom?btn('Open Minutes Repository',"go('mom')"):''}</div>
+ </div>`;
+}
+
+function newMeeting(){
+ modal('Schedule Board Meeting',`
+  <label>Meeting Number</label><input id="mtNo" value="${43+meetings.length-2}">
+  <label>Meeting Title</label><input id="mtTitle" value="Meeting of the Board of Directors">
+  <label>Date *</label><input id="mtDate" type="date">
+  <label>Time</label><input id="mtTime" type="time" value="11:00">
+  <label>Venue / Meeting Link</label><input id="mtVenue" value="KASE Head Office, Thiruvananthapuram">
+  <button class="btn p" onclick="saveMeeting()">Schedule Meeting</button>
+ `);
+}
+
+function saveMeeting(){
+ const title=$('mtTitle').value.trim();
+ const date=$('mtDate').value;
+
+ if(!title||!date){
+  toast('Meeting title and date are required.');
+  return;
+ }
+
+ const m={
+  id:'BM-2026-'+String(43+meetings.length-2).padStart(3,'0'),
+  no:$('mtNo').value,title,date,time:$('mtTime').value,
+  venue:$('mtVenue').value,status:'Scheduled',
+  agendaStatus:'Draft',agenda:[],mom:'',resolutions:[]
+ };
+
+ meetings.unshift(m);
+ agendaMeeting=m.id;
+ closeModal();
+ go('meetings');
+ toast('Meeting scheduled. Notifications are simulated.');
+}
+
+/* AGENDA COLLABORATION
+   A finalised agenda is locked and cannot be edited. */
+
+function agendaPage(){
+ const m=meetings.find(x=>x.id===agendaMeeting)||meetings[0];
+ const finalised=m.agendaStatus==='Finalised';
+
+ const notice=finalised
+  ?'<div class="lock-notice"><b>✓ Agenda Finalised</b><br>This agenda is locked and cannot be edited, amended or extended.</div>'
+  :'<p class="hint">This agenda is a working draft. Save changes before finalising it.</p>';
+
+ const rows=m.agenda.map((a,i)=>`
+  <div class="agenda-item">
+   <div style="color:#0078d4;font-weight:bold">${i+1}.</div>
+   <textarea id="agenda-${i}" ${finalised?'disabled':''}>${esc(a)}</textarea>
+  </div>
+ `).join('');
+
+ let controls='';
+
+ if(!finalised){
+  controls+=btn('Add Agenda Item','addAgendaItem()');
+  controls+=btn('Finalise Agenda','finaliseAgenda()',true);
+ }
+
+ controls+=btn('Distribute to Board Portal','distributeAgenda()');
+
+ return `
+  <div class="card">
+   <h3>Agenda Collaboration Workspace</h3>
+   ${notice}
+
+   <div class="fg">
+    <div class="fd">
+     <label>Board Meeting</label>
+     <select id="agendaMeeting" onchange="changeAgendaMeeting(this.value)">
+      ${meetings.map(x=>`<option value="${x.id}" ${m.id===x.id?'selected':''}>${esc(x.title)} (${esc(x.date)})</option>`).join('')}
+     </select>
+    </div>
+    <div class="fd">
+     <label>Agenda Status</label>
+     <input value="${esc(m.agendaStatus)}" disabled>
+    </div>
+   </div>
+
+   ${rows}
+
+   <div style="padding:12px">${controls}</div>
+   <p class="hint">Once finalised, the agenda is read-only. Actual secure distribution requires backend integration.</p>
+  </div>`;
+}
+
+function changeAgendaMeeting(id){
+ agendaMeeting=id;
+ render();
+}
+
+function openAgendaMeeting(id){
+ agendaMeeting=id;
+ go('agenda');
+}
+
+function addAgendaItem(){
+ const m=meetings.find(x=>x.id===agendaMeeting);
+ if(!m)return;
+
+ if(m.agendaStatus==='Finalised'){
+  toast('This agenda is finalised and cannot be edited.');
+  render();
+  return;
+ }
+
+ saveAgenda(false);
+ m.agenda.push('New agenda item');
+ render();
+ toast('Agenda item added.');
+}
+
+function saveAgenda(showToast=true){
+ const m=meetings.find(x=>x.id===agendaMeeting);
+ if(!m)return false;
+
+ if(m.agendaStatus==='Finalised'){
+  toast('This agenda is finalised. Changes are not permitted.');
+  render();
+  return false;
+ }
+
+ m.agenda=m.agenda.map((a,i)=>{
+  const input=$('agenda-'+i);
+  return input?input.value:a;
+ });
+
+ if(showToast)toast('Agenda changes saved.');
+ return true;
+}
+
+function finaliseAgenda(){
+ const m=meetings.find(x=>x.id===agendaMeeting);
+ if(!m)return;
+
+ if(m.agendaStatus==='Finalised'){
+  toast('This agenda is already finalised and locked.');
+  render();
+  return;
+ }
+
+ if(!saveAgenda(false))return;
+
+ m.agendaStatus='Finalised';
+ render();
+ toast('Agenda finalised. Editing is now disabled.');
+}
+
+function distributeAgenda(){
+ const m=meetings.find(x=>x.id===agendaMeeting);
+ if(!m)return;
+
+ if(m.agendaStatus!=='Finalised'){
+  toast('Finalise the agenda before distributing it.');
+  return;
+ }
+
+ toast('Agenda distribution is simulated in this prototype.');
+}
+
+/* MINUTES AND RESOLUTIONS */
+
+function momPage(){
+ return `
+  <div class="card"><h3>Final Minutes of Meetings & Board Resolutions</h3>
+   ${table(['Repository ID','Meeting','Date','Document','Status'],
+    momRecords.map(m=>`<tr onclick="openDetail('mom','${m.id}')">
+     <td><b>${m.id}</b></td><td>${esc(m.title)}</td><td>${esc(m.date)}</td><td>${esc(m.file)}</td><td>${badge(m.status)}</td>
+    </tr>`).join(''))}
+  </div>`;
+}
+
+function momDetail(m){
+ return `
+  <div class="card"><h3>Minutes of Meeting – Read Only</h3>
+   <div class="fg">
+    ${field('Repository ID',m.id)}
+    ${field('Meeting Reference',m.meeting)}
+    ${field('Meeting Date',m.date)}
+    ${field('Status',m.status)}
+    ${field('Document',m.file)}
+   </div>
+   <h3>Board Resolutions</h3>
+   ${m.resolutions.map(r=>`<div class="he"><b>Resolution ${esc(r.no)}</b><br>${esc(r.text)}</div>`).join('')}
+  </div>`;
+}
+
+/* DETAIL ROUTING */
+
+function detailContent(){
+ const d=detail;
+
+ if(d.type==='claim')return claimDetail(claims.find(x=>x.id===d.id));
+ if(d.type==='req')return reqDetail(reqs.find(x=>x.id===d.id));
+ if(d.type==='outward')return outwardDetail(outward.find(x=>x.id===d.id));
+ if(d.type==='member')return memberDetail(members.find(x=>x.id===d.id));
+ if(d.type==='meeting')return meetingDetail(meetings.find(x=>x.id===d.id));
+ if(d.type==='mom')return momDetail(momRecords.find(x=>x.id===d.id));
+
+ return '<div class="empty">Record not found.</div>';
+}
+
+/* MANDATORY ACTION REMARKS */
+
+function askActionRemarks(type,id,action,title,instruction){
+ pendingRemarkAction={type,id,action};
+
+ modal(title,`
+  <p class="hint">${esc(instruction)}</p>
+  <label for="actionRemarks">Remarks <span style="color:#a4262c">*</span></label>
+  <textarea id="actionRemarks" rows="5" placeholder="Enter remarks..." required></textarea>
+  <div id="actionRemarkError" class="login-error" role="alert"></div>
+  <div style="text-align:right">
+   <button class="btn" onclick="cancelActionRemarks()">Cancel</button>
+   <button class="btn p" onclick="submitActionRemarks()">Confirm Action</button>
+  </div>
+ `);
+
+ setTimeout(()=>$('actionRemarks')?.focus(),50);
+}
+
+function submitActionRemarks(){
+ const remarks=($('actionRemarks')?.value||'').trim();
+
+ if(!remarks){
+  $('actionRemarkError').textContent='Remarks are required to continue.';
+  $('actionRemarks').focus();
+  return;
+ }
+
+ if(!pendingRemarkAction)return;
+
+ const p=pendingRemarkAction;
+ pendingRemarkAction=null;
+ closeModal();
+
+ if(p.type==='claim'){
+  performClaimAction(p.id,p.action,remarks);
+ }else{
+  performReqAction(p.id,p.action,remarks);
+ }
+}
+
+function cancelActionRemarks(){
+ pendingRemarkAction=null;
+ closeModal();
+}
+
+/* GENERAL MODAL */
+
+function modal(title,body){
+ $('modalTitle').textContent=title;
+ $('modalBody').innerHTML=body;
+ $('modal').classList.add('on');
+}
+
+function closeModal(){
+ $('modal').classList.remove('on');
+}
+
+/* SEARCH AND EXPORT */
+
+function globalSearch(value){
+ const v=value.trim().toLowerCase();
+ if(!v)return;
+
+ const pages={
+  'administration dashboard':'home',
+  't.a./d.a. claims':'claims',
+  'ta/da claims':'claims',
+  'digital d.a. register':'daRegister',
+  'stock requisitions':'requisitions',
+  'inventory ledger':'inventory',
+  'outward register':'outward',
+  'board members':'members',
+  'meetings & agenda':'meetings',
+  'agenda collaboration':'agenda',
+  'mom & resolutions':'mom'
+ };
+
+ if(pages[v]){
+  go(pages[v]);
+  $('sr').value='';
+  return;
+ }
+
+ const c=claims.find(x=>(x.id+' '+x.employee+' '+x.purpose).toLowerCase().includes(v));
+ if(c){go('claims');openDetail('claim',c.id);return;}
+
+ const r=reqs.find(x=>(x.id+' '+x.requester+' '+x.lines.map(l=>itemById(l.item).name).join(' ')).toLowerCase().includes(v));
+ if(r){go('requisitions');openDetail('req',r.id);return;}
+
+ const o=outward.find(x=>(x.id+' '+x.recipient+' '+x.subject).toLowerCase().includes(v));
+ if(o){go('outward');openDetail('outward',o.id);return;}
+
+ toast('No matching screen or record found.');
+}
+
+function exportTable(){
+ const rows=[...document.querySelectorAll('table tr')].map(tr=>
+  [...tr.children].map(td=>'"'+td.innerText.replace(/"/g,'""')+'"').join(',')
+ ).join('\r\n');
+
+ const a=document.createElement('a');
+ const url=URL.createObjectURL(new Blob([rows],{type:'text/csv;charset=utf-8;'}));
+ a.href=url;
+ a.download='KASE-Administration-Register.csv';
+ a.click();
+ URL.revokeObjectURL(url);
+ toast('Register exported as CSV.');
+}
+
+document.addEventListener('input',e=>{
+ if(e.target&&e.target.id==='listSearch')filterRows();
+});
+
+/* INITIAL LOAD */
+
+renderNav();
+render();
+</script>
+</body>
+</html>
