@@ -15,13 +15,7 @@ export const SkillDevelopmentModule: React.FC<SkillDevelopmentModuleProps> = ({
   userRole,
   userName,
 }) => {
-  const role = userRole?.toLowerCase().includes('assistant')
-    ? 'assistant'
-    : userRole?.toLowerCase().includes('accreditation')
-    ? 'accreditation'
-    : userRole?.toLowerCase().includes('coe')
-    ? 'coe'
-    : 'manager';
+  const role = userRole?.toLowerCase().includes('assistant') ? 'assistant' : 'manager';
 
   // Schemes
   const [schemes, setSchemes] = useState([

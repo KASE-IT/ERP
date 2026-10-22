@@ -86,18 +86,6 @@ const MODULE_ACCOUNTS: Record<FunctionalModuleId, AccountDef[]> = {
       role: 'Assistant Manager',
       defaultPass: 'Demo@123',
     },
-    {
-      username: 'executive.accreditation',
-      name: 'Shri. Anandhu Krishnan K S',
-      role: 'Executive (Accreditation)',
-      defaultPass: 'Demo@123',
-    },
-    {
-      username: 'executive.coe',
-      name: 'Shri. Ahmed Surjith',
-      role: 'Executive (CoE)',
-      defaultPass: 'Demo@123',
-    },
   ],
   projects: [
     {

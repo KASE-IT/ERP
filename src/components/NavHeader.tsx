@@ -60,20 +60,6 @@ export const NavHeader: React.FC<NavHeaderProps> = ({
             )}
           </div>
         </button>
-
-        {/* Home Reset Quick Button */}
-        <button
-          onClick={() => onSelectModule('home')}
-          className={`text-xs px-2.5 py-1 rounded border transition flex items-center gap-1 ml-2 ${
-            activeModule === 'home'
-              ? 'bg-blue-700/80 border-blue-400 text-white font-medium'
-              : 'bg-[#003861] border-blue-400/40 text-blue-200 hover:text-white hover:bg-blue-700/50'
-          }`}
-          title="Go to Home"
-        >
-          <span>⌂</span>
-          <span>Home</span>
-        </button>
       </div>
 
       {/* Global Command Search & User Credentials */}
@@ -91,11 +77,6 @@ export const NavHeader: React.FC<NavHeaderProps> = ({
             🔍
           </span>
         </div>
-
-        {/* Fiscal Year Badge */}
-        <span className="hidden sm:inline-block bg-[#106ebe] px-2.5 py-0.5 rounded border border-blue-400/30 font-medium text-[11px]">
-          FY 2026-27
-        </span>
 
         {/* User Session Profile & Sign Out */}
         {currentSession ? (
